@@ -7,3 +7,17 @@ before_install:
 
 script:
   - docker run -e CI=true superclass2016/docker-react npm run test
+
+deploy:
+  provider: elasticbeanstalk
+  # http://dockerreact-env.jju4bz2x6r.us-east-1.elasticbeanstalk.com/
+  region: "us-east-1"
+  app: "docker-react"  # same name as used to create service on Elastic Beanstalk 
+  env: "DockerReact-env"  # as generated upon creating of service on EB
+  bucket_name: "elasticbeanstalk-us-east-1-207982171998"  # as generated on S3
+  bucket-path: "docker-react"  # same app above. May change to name of folder after first deploy
+  on:
+    branch: master  # instruction to only deply if code was pushed to master on GitHub
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
